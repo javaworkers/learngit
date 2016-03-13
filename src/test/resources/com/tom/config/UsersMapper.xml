@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tom.mapper.UsersMapper" >
+  <resultMap type="user" id="userMap"></resultMap>
+  <select id="getUserInfoByParam" parameterType="user" resultType="user">
+     select * from user
+     <where>
+      <if test="id!=-1">
+        id=#{id}
+      </if>
+      <if test="sex!=null">
+       and sex=#{sex}
+      </if>
+      <if test="name!=null">
+      and name like "%"#{name}"%"
+      </if>
+     </where>
+  </select>
+  <select id="getInfoByParam" resultType="user" parameterMap="paramMap">
+        select * from user where name like "%"#{name}"%" and id in      
+     <foreach collection="lists" item="map" index="index" open="(" separator="," close=")">
+       #{map}
+     </foreach>
+  </select>
+  <parameterMap type="java.util.Map" id="paramMap">
+    <parameter property="name" jdbcType="VARCHAR"/>
+    <parameter property="lists" jdbcType="OTHER"/>
+  </parameterMap>
+</mapper>

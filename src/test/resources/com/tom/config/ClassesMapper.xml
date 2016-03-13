@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tom.mapper.ClassesMapper" >
+  <sql id="classInfo">
+      c.c_id,c.name,t.t_id,t.t_name
+  </sql>
+  <sql id="classInfo2">
+    c.c_id,c.name,c.teacher_id
+  </sql>
+  <!-- 嵌套结果 (就是通过联表查询，去除重复部分)-->
+  <resultMap type="classes" id="classInfoMap">
+     <id property="id" column="c_id"/>
+     <result property="name" column="name"/>
+     <association property="teacher" javaType="teacher">
+       <id property="id" column="t_id"/>
+       <result property="name" column="t_name"/>
+     </association>
+  </resultMap>
+  <resultMap type="classes" id="classInfoMap2">
+   <id property="id" column="c_id"/>
+   <result property="name" column="name"/>
+   <association property="teacher" column="teacher_id" select="getTeacherInfo">
+   </association>
+  </resultMap>
+  <select id="getClassInfo" parameterType="int" resultMap="classInfoMap">
+      select
+      <include refid="classInfo"></include>
+      from classes as c,teacher as t
+      where
+      t.t_id=c.teacher_id
+      and c.c_id=#{id}
+  </select>
+  <!-- 嵌套查询 -->
+  <select id="getClassInfo2" parameterType="int" resultMap="classInfoMap2">
+    select
+    <include refid="classInfo2"></include>
+    from classes c
+    where c.c_id=#{id}
+  </select>
+  <select id="getTeacherInfo" parameterType="int" resultType="teacher">
+     select t.t_id as id,t.t_name as name from teacher t where t.t_id=#{id}
+  </select>
+</mapper>

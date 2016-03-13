@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tom.mapper.UserMapper" >
+  <sql id="userInfo">
+   id,name,sex,age
+  </sql>
+  <resultMap type="user" id="userMap">
+    <id property="id" column="id"/>
+    <result property="name" column="name"/>
+    <result property="sex" column="sex"/>
+    <result property="age" column="age"/>
+  </resultMap>
+  <select id="getUserInfo" parameterType="com.tom.VO.VOUser" resultMap="userMap">
+    select
+    <include refid="userInfo"></include>
+    from user where
+    <if test="name!=null">
+       name like "%"#{name}"%" and 
+    </if>
+    age between #{minAge} and #{maxAge}
+    order by id desc
+  </select>
+  <!-- 调用存储过程 -->
+  <select id="getUserCount" parameterMap="paramMaps" statementType="CALLABLE">
+      CALL logistics.get_user_count(?,?)
+  </select>
+  <parameterMap type="java.util.Map" id="paramMaps">
+    <parameter property="sexId" mode="IN" jdbcType="INTEGER"/>
+    <parameter property="sexcount" mode="OUT" jdbcType="INTEGER"/>
+  </parameterMap>
+</mapper>

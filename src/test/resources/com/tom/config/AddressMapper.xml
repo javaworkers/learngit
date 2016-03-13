@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tom.inter.AddressMapper" >
+  <resultMap id="BaseResultMap" type="com.tom.model.Address" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="receiverName" property="receivername" jdbcType="VARCHAR" />
+    <result column="accountID" property="accountid" jdbcType="INTEGER" />
+    <result column="receiverPhone" property="receiverphone" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, address, receiverName, accountID, receiverPhone
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from address
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from address
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.tom.model.Address" >
+    insert into address (id, address, receiverName, 
+      accountID, receiverPhone)
+    values (#{id,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR}, #{receivername,jdbcType=VARCHAR}, 
+      #{accountid,jdbcType=INTEGER}, #{receiverphone,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tom.model.Address" >
+    insert into address
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="receivername != null" >
+        receiverName,
+      </if>
+      <if test="accountid != null" >
+        accountID,
+      </if>
+      <if test="receiverphone != null" >
+        receiverPhone,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="receivername != null" >
+        #{receivername,jdbcType=VARCHAR},
+      </if>
+      <if test="accountid != null" >
+        #{accountid,jdbcType=INTEGER},
+      </if>
+      <if test="receiverphone != null" >
+        #{receiverphone,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tom.model.Address" >
+    update address
+    <set >
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="receivername != null" >
+        receiverName = #{receivername,jdbcType=VARCHAR},
+      </if>
+      <if test="accountid != null" >
+        accountID = #{accountid,jdbcType=INTEGER},
+      </if>
+      <if test="receiverphone != null" >
+        receiverPhone = #{receiverphone,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tom.model.Address" >
+    update address
+    set address = #{address,jdbcType=VARCHAR},
+      receiverName = #{receivername,jdbcType=VARCHAR},
+      accountID = #{accountid,jdbcType=INTEGER},
+      receiverPhone = #{receiverphone,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
